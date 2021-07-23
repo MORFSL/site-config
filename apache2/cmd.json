@@ -1,0 +1,65 @@
+[
+    {
+        "name":"update system",
+        "cmd":"$update_system"
+    },
+    {
+        "name":"install apache",
+        "cmd":"$get_apache2"
+    },
+    {
+        "name":"allow apache in ufw",
+        "cmd":"ufw allow in \"Apache\""
+    },
+    {
+        "name":"website name? (example.com)",
+        "cmd":"website_name=<response>",
+        "set":"website_name",
+        "ask" : "website_name"
+    },
+    {
+        "name":"setting permissions for $website_name",
+        "cmd":"chown -R $USER:$USER /var/www/$website_name"
+    },
+    {
+        "name":"setting permissions for /var/www",
+        "cmd":"chmod -R 755 /var/www"
+    },
+    {
+        "name":"nodejs application 80 port alias",
+        "ask" : "node_http",
+        "set":"node_http"
+    },
+    {
+        "name":"nodejs application 443 port alias",
+        "ask" : "node_https",
+        "set":"node_https"
+    },
+    {
+        "name":"SSL Certificate File (fullchain.pem)",
+        "ask" : "sslcert",
+        "set":"sslcert"
+    },
+    {
+        "name":"SSL Certificate Private Key (fullchain.pem)",
+        "ask" : "sslkey",
+        "set":"sslkey"
+    },
+    {
+        "name":"creating vhost config",
+        "opt":"copy_vhost",
+        "replace": ["node_http","node_https","sslcert","sslkey","website_name"]
+    },
+    {
+        "name":"enabling site",
+        "cmd":"a2ensite $website_name"
+    },
+    {
+        "name":"congit test",
+        "cmd":"$apache_configtest"
+    },
+    {
+        "name":"restart apache",
+        "cmd":"$apache_restart"
+    }
+]
